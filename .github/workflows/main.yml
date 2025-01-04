@@ -32,23 +32,3 @@ jobs:
 
       - name: Run tests
         run: mvn test --batch-mode --no-transfer-progress
-
-  qodana-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run Qodana Code Scan
-        uses: JetBrains/qodana-action@v2024.3.4
-        with:
-          project-dir: ./
-          results-dir: ./qodana-results
-          cache-dir: ./qodana-cache
-
-      - name: Upload Qodana Report
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: qodana-report
-          path: ./qodana-results
