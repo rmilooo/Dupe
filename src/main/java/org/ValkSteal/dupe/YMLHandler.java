@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class YMLHandler {
     private final File file;
@@ -39,6 +41,19 @@ public class YMLHandler {
 
     public ItemStack getItemStack(String path, ItemStack defaultValue) {
         return config.getItemStack(path, defaultValue);
+    }
+
+    public ItemStack[] getItemStackArray(String path) {
+        List<?> list = config.getList(path);
+        if (list == null) return new ItemStack[0];
+
+        List<ItemStack> itemStacks = new ArrayList<>();
+        for (Object obj : list) {
+            if (obj instanceof ItemStack) {
+                itemStacks.add((ItemStack) obj);
+            }
+        }
+        return itemStacks.toArray(new ItemStack[0]);
     }
 
     public void set(String path, Object value) {

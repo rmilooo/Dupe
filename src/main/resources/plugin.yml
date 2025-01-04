@@ -2,3 +2,5 @@ name: Dupe
 version: '1.0-SNAPSHOT'
 main: org.ValkSteal.dupe.Dupe
 api-version: '1.20'
+
+
