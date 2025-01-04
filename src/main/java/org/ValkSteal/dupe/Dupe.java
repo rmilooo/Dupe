@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class Dupe extends JavaPlugin {
+
     // Array to store blacklisted items
     public static ItemStack[] BlackListedItems;
     // Singleton instance of Dupe
@@ -22,6 +23,7 @@ public final class Dupe extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
         // Sets the instance that can be accessed from anywhere in the plugin
         Instance = this;
 
@@ -37,6 +39,7 @@ public final class Dupe extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
         // Stop Message
         MainLogger.info("Dupe has been disabled!");
 
