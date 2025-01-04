@@ -1,4 +1,4 @@
-name: Java Build with Maven
+name: Java Maven Testing
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main # Trigger on pushes to the 'main' branch
 
 jobs:
-  build-and-release:
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -27,23 +27,8 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
 
-    - name: Build with Maven
+    - name: Build the project
       run: mvn clean install --batch-mode --no-transfer-progress -T 1C
 
     - name: Run tests
       run: mvn test --batch-mode --no-transfer-progress
-
-    - name: Package the application
-      if: success() # Only proceed if tests succeed
-      run: mvn package --batch-mode --no-transfer-progress
-
-    - name: Upload JAR as release
-      if: success()
-      uses: ncipollo/release-action@v1
-      with:
-        artifacts: target/*.jar # Path to the packaged JAR file
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ github.sha }} # Use commit SHA as tag, or customize this
-        name: Release ${{ github.sha }} # Customize release name
-        commit: ${{ github.sha }}
-        prerelease: false # Set to true if this is a pre-release
