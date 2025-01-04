@@ -29,21 +29,21 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install --batch-mode --no-transfer-progress -T 1C
-      # --batch-mode: Minimizes output for faster processing
-      # -T 1C: Uses 1 thread per available CPU core for parallel builds
 
     - name: Run tests
       run: mvn test --batch-mode --no-transfer-progress
 
-    - name: Package and release
-      if: success() # Only proceed if previous steps succeed
+    - name: Package the application
+      if: success() # Only proceed if tests succeed
       run: mvn package --batch-mode --no-transfer-progress
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Upload package
+    - name: Upload JAR as release
       if: success()
-      uses: actions/upload-artifact@v3
+      uses: ncipollo/release-action@v1
       with:
-        name: java-build-package
-        path: target/*.jar
+        artifacts: target/*.jar # Path to the packaged JAR file
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.sha }} # Use commit SHA as tag, or customize this
+        name: Release ${{ github.sha }} # Customize release name
+        commit: ${{ github.sha }}
+        prerelease: false # Set to true if this is a pre-release
