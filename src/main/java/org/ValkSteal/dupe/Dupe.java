@@ -2,6 +2,7 @@ package org.ValkSteal.dupe;
 
 import org.ValkSteal.dupe.Commands.BlackListCommand;
 import org.ValkSteal.dupe.Commands.DupeCommand;
+import org.ValkSteal.dupe.Config.ConfigurationHandler;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,6 +22,8 @@ public final class Dupe extends JavaPlugin {
     public YMLHandler BlackListedFileConfig = new YMLHandler("blackListed.yml", getDataFolder().getPath());
     // Default logger provided by the Paper server
     public Logger PaperLogger = getLogger();
+    // Default Text Configuration Handler
+    public ConfigurationHandler configHandler;
 
 
     @Override
@@ -28,6 +31,10 @@ public final class Dupe extends JavaPlugin {
 
         // Sets the instance that can be accessed from anywhere in the plugin
         Instance = this;
+
+        // Initialize the configuration handler
+        configHandler = new ConfigurationHandler();
+        configHandler.initializeConfig();
 
         // Start Message
         MainLogger.info("Dupe has been enabled!");
@@ -59,8 +66,8 @@ public final class Dupe extends JavaPlugin {
         // Register events and commands here
 
         // Commands:
-        Objects.requireNonNull(getCommand("dupe")).setExecutor(new DupeCommand());
-        Objects.requireNonNull(getCommand("blacklist")).setExecutor(new BlackListCommand());
+        Objects.requireNonNull(getCommand("dupe")).setExecutor(new DupeCommand(configHandler));
+        Objects.requireNonNull(getCommand("blacklist")).setExecutor(new BlackListCommand(configHandler));
 
         // Config:
         saveDefaultConfig();

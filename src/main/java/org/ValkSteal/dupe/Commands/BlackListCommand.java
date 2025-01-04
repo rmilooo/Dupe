@@ -1,5 +1,7 @@
 package org.ValkSteal.dupe.Commands;
 
+
+import org.ValkSteal.dupe.Config.ConfigurationHandler;
 import org.ValkSteal.dupe.Dupe;
 import org.ValkSteal.dupe.ItemStandardize;
 import org.bukkit.Material;
@@ -14,32 +16,39 @@ import java.util.Arrays;
 
 public class BlackListCommand implements CommandExecutor {
 
+    private final ConfigurationHandler configHandler;
+
+    public BlackListCommand(ConfigurationHandler configHandler) {
+        this.configHandler = configHandler;
+    }
+
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        if (!(commandSender.hasPermission("dupe.command.blacklist"))) {
-            commandSender.sendMessage("§4§l[Dupe] You do not have permission to use this command.");
+        if (!commandSender.hasPermission("dupe.command.blacklist")) {
+            commandSender.sendMessage(configHandler.getMessage("messages.blacklist.noPermission"));
             return true;
         }
-        if (!(commandSender instanceof Player player)){
-            commandSender.sendMessage("§4§l[Dupe] This command can only be executed by a player.");
+
+        if (!(commandSender instanceof Player player)) {
+            commandSender.sendMessage(configHandler.getMessage("messages.blacklist.notAPlayer"));
             return true;
         }
 
         ItemStack handItem = ItemStandardize.standardize(player.getInventory().getItemInMainHand());
-
         if (handItem == null || handItem.getType() == Material.AIR || handItem.isEmpty()) {
-            player.sendMessage("§4§l[Dupe] You don't have any items in your hand.");
-            Dupe.Instance.MainLogger.warning(player.getName() + " tried to use the blacklist command but didn't have an item in their hand.");
+            player.sendMessage(configHandler.getMessage("messages.blacklist.noItemInHand"));
+            Dupe.Instance.MainLogger.warning(player.getName() + " tried to use the blacklist command without an item in hand.");
             return true;
         }
+
         if (Arrays.stream(Dupe.BlackListedItems).anyMatch(itemStack -> itemStack.isSimilar(handItem))) {
-            player.sendMessage("§4§l[Dupe] That item is already blacklisted.");
-            Dupe.Instance.MainLogger.warning(player.getName() + " tried to use the blacklist command on an already blacklisted item.");
+            player.sendMessage(configHandler.getMessage("messages.blacklist.alreadyBlacklisted"));
+            Dupe.Instance.MainLogger.warning(player.getName() + " tried to blacklist an already blacklisted item.");
             return true;
         }
 
         Dupe.Instance.addItemToBlacklist(handItem);
-        player.sendMessage("§a§l[Dupe] Item added to the blacklist.");
+        player.sendMessage(configHandler.getMessage("messages.blacklist.itemAdded"));
         Dupe.Instance.MainLogger.info(player.getName() + " added " + handItem.getType().name() + " to the blacklist.");
         return true;
     }
