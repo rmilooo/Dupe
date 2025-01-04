@@ -16,8 +16,9 @@ public class DupeCommand implements CommandExecutor {
             Dupe.Instance.MainLogger.info("A non player tried to use the dupe command.");
             return true;
         }
-        if (!commandSender.hasPermission("dupe."))
-            return false;
+        if (!commandSender.hasPermission("dupe.command.dupe")) {
+
+        }
         return false;
     }
 }

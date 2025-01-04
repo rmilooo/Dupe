@@ -2,3 +2,15 @@ name: Dupe
 version: '1.0-SNAPSHOT'
 main: org.ValkSteal.dupe.Dupe
 api-version: '1.21'
+
+commands:
+  dupe:
+    description: Executes the dupe command.
+    usage: /dupe
+    permission: dupe.command.dupe
+    permission-message: You do not have permission to execute this command.
+
+permissions:
+  dupe.command.dupe:
+    description: Allows the user to use the dupe command
+    default: true
