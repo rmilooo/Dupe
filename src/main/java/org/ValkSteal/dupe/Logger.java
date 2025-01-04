@@ -15,10 +15,6 @@ public class Logger {
     private final boolean logToFile;
     private final SimpleDateFormat dateFormat;
 
-    public enum LogLevel {
-        INFO, WARNING, ERROR, DEBUG
-    }
-
     public Logger(JavaPlugin plugin, String logFileName, boolean logToFile) {
         this.plugin = plugin;
         this.logFileName = logFileName;
@@ -37,7 +33,7 @@ public class Logger {
                     logFile.createNewFile();
                 }
             } catch (IOException e) {
-                Dupe.Instance.Logger.warning("[Logger] Failed to create log file: " + e.getMessage());
+                Dupe.Instance.PaperLogger.warning("[PaperLogger] Failed to create log file: " + e.getMessage());
             }
         }
     }
@@ -49,17 +45,17 @@ public class Logger {
         // Print to console
         switch (level) {
             case INFO:
-                Dupe.Instance.Logger.info(logMessage);
+                Dupe.Instance.PaperLogger.info(logMessage);
                 break;
             case WARNING:
-                Dupe.Instance.Logger.warning(logMessage);
+                Dupe.Instance.PaperLogger.warning(logMessage);
                 break;
             case ERROR:
-                Dupe.Instance.Logger.severe(logMessage);
+                Dupe.Instance.PaperLogger.severe(logMessage);
                 break;
             case DEBUG:
                 if (plugin.getConfig().getBoolean("debug-mode", false)) {
-                    Dupe.Instance.Logger.info("[DEBUG] " + logMessage);
+                    Dupe.Instance.PaperLogger.info("[DEBUG] " + logMessage);
                 }
                 break;
         }
@@ -74,7 +70,7 @@ public class Logger {
         try (FileWriter writer = new FileWriter(new File(plugin.getDataFolder(), logFileName), true)) {
             writer.write(message + System.lineSeparator());
         } catch (IOException e) {
-            Dupe.Instance.Logger.warning("[Logger] Failed to write to log file: " + e.getMessage());
+            Dupe.Instance.PaperLogger.warning("[PaperLogger] Failed to write to log file: " + e.getMessage());
         }
     }
 
@@ -92,5 +88,9 @@ public class Logger {
 
     public void debug(String message) {
         log(LogLevel.DEBUG, message);
+    }
+
+    public enum LogLevel {
+        INFO, WARNING, ERROR, DEBUG
     }
 }

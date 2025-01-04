@@ -18,10 +18,12 @@ public class YMLHandler {
         if (!file.exists()) {
             try {
                 if (file.getParentFile().mkdirs()) {
-                    file.createNewFile();
+                    if (!file.createNewFile()) {
+                        Dupe.Instance.MainLogger.error("Could not create new file " + file.getPath());
+                    }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Dupe.Instance.MainLogger.error("Could not create new file " + file.getPath());
             }
         }
         this.config = YamlConfiguration.loadConfiguration(file);
@@ -51,6 +53,8 @@ public class YMLHandler {
         for (Object obj : list) {
             if (obj instanceof ItemStack) {
                 itemStacks.add((ItemStack) obj);
+            }else {
+                Dupe.Instance.MainLogger.warning("Invalid value for path " + path + ": " + obj);
             }
         }
         return itemStacks.toArray(new ItemStack[0]);
@@ -64,7 +68,7 @@ public class YMLHandler {
         try {
             config.save(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            Dupe.Instance.MainLogger.error("Could not save config to " + file.getPath());
         }
     }
 
