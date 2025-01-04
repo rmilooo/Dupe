@@ -37,6 +37,8 @@ public final class Dupe extends JavaPlugin {
 
         // Load blacklisted items from the yml file
         loadItemStackArray(BlackListedFileConfig);
+
+        MainLogger.debug(Arrays.toString(BlackListedItems));
     }
 
     @Override
@@ -59,10 +61,6 @@ public final class Dupe extends JavaPlugin {
         // Commands:
         Objects.requireNonNull(getCommand("dupe")).setExecutor(new DupeCommand());
         Objects.requireNonNull(getCommand("blacklist")).setExecutor(new BlackListCommand());
-
-        // Permissions:
-        getServer().getPluginManager().addPermission(new org.bukkit.permissions.Permission("dupe.command.dupe"));
-        getServer().getPluginManager().addPermission(new org.bukkit.permissions.Permission("dupe.command.blacklist"));
 
         // Config:
         saveDefaultConfig();

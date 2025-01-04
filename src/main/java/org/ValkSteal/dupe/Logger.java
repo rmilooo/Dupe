@@ -2,6 +2,7 @@ package org.ValkSteal.dupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -43,45 +44,30 @@ public class Logger {
     }
 
     public void log(LogLevel level, String message) {
-        String timeStamp = dateFormat.format(new Date());
-        String logMessage = String.format("[%s] [%s] %s", timeStamp, level.name(), message);
-
-        // Prepare color formatted log message
-        String formattedMessage = formatMessage(level, logMessage);
+        String logMessage = String.format("%s", message);
 
         // Print to console with color
         switch (level) {
             case INFO:
-                Dupe.Instance.PaperLogger.info(formattedMessage);
+                Dupe.Instance.PaperLogger.info(logMessage);
                 break;
             case WARNING:
-                Dupe.Instance.PaperLogger.warning(formattedMessage);
+                Dupe.Instance.PaperLogger.warning(logMessage);
                 break;
             case ERROR:
-                Dupe.Instance.PaperLogger.severe(formattedMessage);
+                Dupe.Instance.PaperLogger.severe(logMessage);
                 break;
             case DEBUG:
                 if (plugin.getConfig().getBoolean("debug-mode", false)) {
-                    Dupe.Instance.PaperLogger.info("[DEBUG] " + formattedMessage);
+                    Dupe.Instance.PaperLogger.info("[DEBUG] " + logMessage);
                 }
                 break;
         }
 
         // Write to log file
         if (logToFile) {
-            writeToFile(formattedMessage);
+            writeToFile(logMessage);
         }
-    }
-
-    private String formatMessage(LogLevel level, String message) {
-        String colorCode = switch (level) {
-            case INFO -> "<green>";
-            case WARNING -> "<yellow>";
-            case ERROR -> "<red>";
-            case DEBUG -> "<blue>";
-        };
-        Component componentMessage = miniMessage.deserialize(colorCode + message);
-        return componentMessage.toString();  // Convert Component back to String
     }
 
     private void writeToFile(String message) {

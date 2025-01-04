@@ -6,18 +6,18 @@ api-version: '1.21'
 commands:
   dupe:
     description: Executes the dupe command.
-    usage: /dupe
     permission: dupe.command.dupe
     permission-message: You do not have permission to execute this command.
   blacklist:
     description: Executes the blacklist command.
-    usage: /blacklist
     permission: dupe.command.blacklist
     permission-message: You do not have permission to execute this command.
+
+
 permissions:
   dupe.command.dupe:
     description: Allows the user to use the dupe command
-    default: op
+    default: true
   dupe.command.blacklist:
     description: Allows the user to add an Item to the dupe BlackList
-    default: true
+    default: op
