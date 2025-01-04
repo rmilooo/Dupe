@@ -20,7 +20,6 @@ public class ConfigurationHandler {
 
     /**
      * Loads default configuration values and saves them if not already present.
-     * 
      */
     public void initializeConfig() {
         configHandler.getConfig().addDefault("messages.dupe.noPermission", "§4§l[Dupe] You do not have permission to use this command.");
