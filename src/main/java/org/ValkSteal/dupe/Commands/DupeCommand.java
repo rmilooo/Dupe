@@ -50,9 +50,8 @@ public class DupeCommand implements CommandExecutor {
         }
 
         ItemStack standardizedItem = ItemStandardize.standardize(handItem);
-        boolean isBlacklisted = Arrays.stream(Dupe.BlackListedItems).anyMatch(itemStack -> itemStack.isSimilar(standardizedItem));
 
-        if (isBlacklisted) {
+        if (Dupe.Instance.isItemBlacklisted(standardizedItem)) {
             player.sendMessage(configHandler.getMessage("messages.dupe.blacklistedItem"));
             Dupe.Instance.MainLogger.info(player.getName() + " tried to use the dupe command on a blacklisted item.");
             return true;

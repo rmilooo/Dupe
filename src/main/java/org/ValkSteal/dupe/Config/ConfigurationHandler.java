@@ -1,6 +1,5 @@
 package org.ValkSteal.dupe.Config;
 
-
 import org.ValkSteal.dupe.Dupe;
 import org.ValkSteal.dupe.YMLHandler;
 
@@ -29,10 +28,17 @@ public class ConfigurationHandler {
         configHandler.getConfig().addDefault("messages.dupe.blacklistedItem", "§4§l[Dupe] This item is blacklisted.");
 
         configHandler.getConfig().addDefault("messages.blacklist.noPermission", "§4§l[Dupe] You do not have permission to use this command.");
+        configHandler.getConfig().addDefault("messages.blacklist.usage", "§a§l[Dupe] Usage: /blacklist <add|remove|list>");
+        configHandler.getConfig().addDefault("messages.blacklist.invalidSubcommand", "§4§l[Dupe] Invalid subcommand. Use /blacklist <add|remove|list>.");
         configHandler.getConfig().addDefault("messages.blacklist.notAPlayer", "§4§l[Dupe] This command can only be executed by a player.");
         configHandler.getConfig().addDefault("messages.blacklist.noItemInHand", "§4§l[Dupe] You don't have any items in your hand.");
         configHandler.getConfig().addDefault("messages.blacklist.alreadyBlacklisted", "§4§l[Dupe] That item is already blacklisted.");
         configHandler.getConfig().addDefault("messages.blacklist.itemAdded", "§a§l[Dupe] Item added to the blacklist.");
+        configHandler.getConfig().addDefault("messages.blacklist.invalidItem", "§4§l[Dupe] Invalid item: {item}");
+        configHandler.getConfig().addDefault("messages.blacklist.itemRemoved", "§a§l[Dupe] Item {item} removed from the blacklist.");
+        configHandler.getConfig().addDefault("messages.blacklist.itemNotBlacklisted", "§4§l[Dupe] Item {item} is not blacklisted.");
+        configHandler.getConfig().addDefault("messages.blacklist.noBlacklistedItems", "§a§l[Dupe] There are no blacklisted items.");
+        configHandler.getConfig().addDefault("messages.blacklist.listHeader", "§a§l[Dupe] Blacklisted items:");
 
         configHandler.getConfig().options().copyDefaults(true);
         configHandler.save();

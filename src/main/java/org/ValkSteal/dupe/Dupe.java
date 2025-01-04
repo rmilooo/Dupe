@@ -3,10 +3,14 @@ package org.ValkSteal.dupe;
 import org.ValkSteal.dupe.Commands.BlackListCommand;
 import org.ValkSteal.dupe.Commands.DupeCommand;
 import org.ValkSteal.dupe.Config.ConfigurationHandler;
+import org.ValkSteal.dupe.TabCompleter.BlackListTabCompleter;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -67,7 +71,9 @@ public final class Dupe extends JavaPlugin {
 
         // Commands:
         Objects.requireNonNull(getCommand("dupe")).setExecutor(new DupeCommand(configHandler));
+
         Objects.requireNonNull(getCommand("blacklist")).setExecutor(new BlackListCommand(configHandler));
+        Objects.requireNonNull(getCommand("blacklist")).setTabCompleter(new BlackListTabCompleter());
 
         // Config:
         saveDefaultConfig();
@@ -83,4 +89,36 @@ public final class Dupe extends JavaPlugin {
         BlackListedFileConfig.set("BlacklistedItems", BlackListedItems);
         BlackListedFileConfig.save();
     }
+
+    public boolean isItemBlacklisted(ItemStack handItem) {
+        return Arrays.stream(BlackListedItems)
+                .anyMatch(blacklistedItem -> blacklistedItem.isSimilar(handItem));
+    }
+
+    public boolean removeItemFromBlacklist(ItemStack item) {
+        if (item == null || BlackListedItems == null || BlackListedItems.length == 0) {
+            return false;
+        }
+
+        // Create a list from the existing blacklisted items
+        List<ItemStack> updatedList = new ArrayList<>(Arrays.asList(BlackListedItems));
+
+        // Remove the item if it's found
+        boolean removed = updatedList.removeIf(blacklistedItem -> blacklistedItem.isSimilar(item));
+
+        if (removed) {
+            // Update BlackListedItems and save to YML file
+            BlackListedItems = updatedList.toArray(new ItemStack[0]);
+            BlackListedFileConfig.set("BlacklistedItems", BlackListedItems);
+            BlackListedFileConfig.save();
+        }
+
+        return removed;
+    }
+
+
+    public ItemStack[] getBlackListedItems() {
+        return BlackListedItems;
+    }
+
 }
