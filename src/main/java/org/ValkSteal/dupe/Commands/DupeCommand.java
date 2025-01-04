@@ -5,11 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.eclipse.sisu.launch.Main;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
 
 public class DupeCommand implements CommandExecutor {
 
@@ -42,12 +44,31 @@ public class DupeCommand implements CommandExecutor {
             return true;
         }
 
+
+        // Standardize the item
+        ItemStack standardizedItem = handItem.clone();
+        standardizedItem.setAmount(1);
+
+        // Ensure the item meta is not null and supports Damageable
+        ItemMeta meta = standardizedItem.getItemMeta();
+        if (meta instanceof Damageable standardizedMeta) {
+            standardizedMeta.setDamage(0);
+            standardizedItem.setItemMeta(standardizedMeta);
+        } else {
+            // Handle non-damageable items if needed
+            throw new IllegalArgumentException("Item is not damageable");
+        }
+
+        boolean isBlacklisted = Arrays.stream(Dupe.BlackListedItems).anyMatch(itemStack -> itemStack.isSimilar(standardizedItem));
+        if (isBlacklisted){
+            player.sendMessage("§4This item is blacklisted.");
+            Dupe.Instance.MainLogger.info(player.getName() + " tried to use the dupe command on a blacklisted item.");
+            return true;
+        }
+
         // Dupe the item and add it to the player's inventory
         player.getInventory().addItem(handItem.clone());
 
-        // Continue with the dupe command logic if the inventory is not full
-        // Add your dupe functionality here
-
-        return false;
+        return true;
     }
 }

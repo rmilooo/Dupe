@@ -1,9 +1,11 @@
 package org.ValkSteal.dupe;
 
+import org.ValkSteal.dupe.Commands.BlackListCommand;
 import org.ValkSteal.dupe.Commands.DupeCommand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -56,9 +58,11 @@ public final class Dupe extends JavaPlugin {
 
         // Commands:
         Objects.requireNonNull(getCommand("dupe")).setExecutor(new DupeCommand());
+        Objects.requireNonNull(getCommand("blacklist")).setExecutor(new BlackListCommand());
 
         // Permissions:
         getServer().getPluginManager().addPermission(new org.bukkit.permissions.Permission("dupe.command.dupe"));
+        getServer().getPluginManager().addPermission(new org.bukkit.permissions.Permission("dupe.command.blacklist"));
 
         // Config:
         saveDefaultConfig();
@@ -66,5 +70,12 @@ public final class Dupe extends JavaPlugin {
 
     public void loadItemStackArray(YMLHandler ymlHandler) {
         BlackListedItems = ymlHandler.getItemStackArray("BlacklistedItems");
+    }
+
+    public void addItemToBlacklist(ItemStack itemStack) {
+        BlackListedItems = Arrays.copyOf(BlackListedItems, BlackListedItems.length + 1);
+        BlackListedItems[BlackListedItems.length - 1] = itemStack;
+        BlackListedFileConfig.set("BlacklistedItems", BlackListedItems);
+        BlackListedFileConfig.save();
     }
 }

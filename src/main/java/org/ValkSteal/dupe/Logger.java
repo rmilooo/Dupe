@@ -74,24 +74,12 @@ public class Logger {
     }
 
     private String formatMessage(LogLevel level, String message) {
-        String colorCode;
-        switch (level) {
-            case INFO:
-                colorCode = "<green>";
-                break;
-            case WARNING:
-                colorCode = "<yellow>";
-                break;
-            case ERROR:
-                colorCode = "<red>";
-                break;
-            case DEBUG:
-                colorCode = "<blue>";
-                break;
-            default:
-                colorCode = "<white>";
-                break;
-        }
+        String colorCode = switch (level) {
+            case INFO -> "<green>";
+            case WARNING -> "<yellow>";
+            case ERROR -> "<red>";
+            case DEBUG -> "<blue>";
+        };
         Component componentMessage = miniMessage.deserialize(colorCode + message);
         return componentMessage.toString();  // Convert Component back to String
     }
