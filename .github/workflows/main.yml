@@ -3,11 +3,10 @@ name: Java Build with Maven
 on:
   push:
     branches:
-      - main  # Trigger the build when pushing to the 'main' branch
-    # Optionally, you can add more events like pull_request, if needed
+      - main # Trigger on pushes to the 'main' branch
 
 jobs:
-  build:
+  build-and-release:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -29,7 +28,22 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Build with Maven
-      run: mvn clean install --no-transfer-progress
+      run: mvn clean install --batch-mode --no-transfer-progress -T 1C
+      # --batch-mode: Minimizes output for faster processing
+      # -T 1C: Uses 1 thread per available CPU core for parallel builds
 
     - name: Run tests
-      run: mvn test --no-transfer-progress
+      run: mvn test --batch-mode --no-transfer-progress
+
+    - name: Package and release
+      if: success() # Only proceed if previous steps succeed
+      run: mvn package --batch-mode --no-transfer-progress
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload package
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: java-build-package
+        path: target/*.jar
