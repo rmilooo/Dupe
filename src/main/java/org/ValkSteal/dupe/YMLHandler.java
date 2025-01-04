@@ -53,7 +53,7 @@ public class YMLHandler {
         for (Object obj : list) {
             if (obj instanceof ItemStack) {
                 itemStacks.add((ItemStack) obj);
-            }else {
+            } else {
                 Dupe.Instance.MainLogger.warning("Invalid value for path " + path + ": " + obj);
             }
         }
