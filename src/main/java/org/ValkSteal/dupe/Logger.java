@@ -1,30 +1,20 @@
 package org.ValkSteal.dupe;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Logger {
 
     private final JavaPlugin plugin;
     private final String logFileName;
     private final boolean logToFile;
-    private final SimpleDateFormat dateFormat;
-    private final MiniMessage miniMessage;
-
     public Logger(JavaPlugin plugin, String logFileName, boolean logToFile) {
         this.plugin = plugin;
         this.logFileName = logFileName;
         this.logToFile = logToFile;
-        this.dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        this.miniMessage = MiniMessage.miniMessage();
         if (logToFile) {
             initializeLogFile();
         }
